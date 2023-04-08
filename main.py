@@ -182,31 +182,52 @@ def main():
     flag = True
     
     clock = pygame.time.Clock()
-    score = []
+    scores = []
     app = QApplication([])
-
-    # Exibe uma caixa de diálogo para que o usuário insira seu nome
-    nome, ok = QInputDialog.getText(None, 'Nome', 'Digite seu nome:')
+    score = 0
+    length = len(s.body)
+    ok = False
+    nome = ''
+    while ok == False or nome == '' or len(nome) < 4:
+        # Exibe uma caixa de diálogo para que o usuário insira seu nome
+        nome, ok = QInputDialog.getText(None, 'Nome', 'Digite seu nome:')
 
     # Se o usuário pressionou o botão 'OK', exibe uma mensagem de boas-vindas com o nome inserido
     if ok:
-        QMessageBox.information(None, 'Boas-vindas', f'Olá, {nome}!')
-
+        QMessageBox.information(None, 'Boas-vindas', f'Olá, {nome.capitalize()}!')
+        
     # app.exec_()
     
     while flag:
         pygame.time.delay(50)
         clock.tick(10)
         s.move()
+        if len(s.body) > 0 and len(s.body) < 10:
+            score = len(s.body)
+        elif len(s.body) >= 10 and len(s.body) < 20:
+            score = len(s.body) * 2
+        elif len(s.body) >= 20 and len(s.body) < 30:
+            score = len(s.body) * 2.5
+        elif len(s.body) >= 30:
+            score = len(s.body) * 3
+            
         if s.body[0].pos == snack.pos:
             s.add_cube()
             snack = Cube(random_snack(rows, s), color=(0,255,0))
             
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos, s.body[x+1 :])):
-                score.append(nome,len(s.body))
-                print('Score: ', sorted(score, reverse=True))
-                message_box('You Lost! Play Again!', f'Your score was: {len(s.body)}')
+                scores.append((nome.capitalize(),score))
+                print('Score: ', sorted(scores, key=lambda x:x[1], reverse=True))
+                message_box('You Lost!', f'{nome.capitalize()} your scores was: {len(s.body)}')
+                nome = ''
+                while ok == False or nome == '' or len(nome) < 4:
+                    # Exibe uma caixa de diálogo para que o usuário insira seu nome
+                    nome, ok = QInputDialog.getText(None, 'Nome', 'Digite seu nome:')
+
+                # Se o usuário pressionou o botão 'OK', exibe uma mensagem de boas-vindas com o nome inserido
+                if ok:
+                    QMessageBox.information(None, 'Boas-vindas', f'Olá, {nome.capitalize()}!')
                 s.reset((10,10))
                 break
         redraw_window(win)

@@ -219,7 +219,7 @@ def main():
             if s.body[x].pos in list(map(lambda z:z.pos, s.body[x+1 :])):
                 scores.append((nome.capitalize(),score))
                 print('Score: ', sorted(scores, key=lambda x:x[1], reverse=True))
-                message_box('You Lost!', f'{nome.capitalize()} your scores was: {len(s.body)}')
+                message_box('You Lost!', f'{nome.capitalize()} your scores was: {score}')
                 nome = ''
                 while ok == False or nome == '' or len(nome) < 4:
                     # Exibe uma caixa de diálogo para que o usuário insira seu nome

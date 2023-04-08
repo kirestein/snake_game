@@ -2,6 +2,8 @@ import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
+from PySide2.QtWidgets import QApplication, QMessageBox, QInputDialog
+
 
 class Cube(object):
     rows = 20
@@ -180,6 +182,17 @@ def main():
     flag = True
     
     clock = pygame.time.Clock()
+    score = []
+    app = QApplication([])
+
+    # Exibe uma caixa de diálogo para que o usuário insira seu nome
+    nome, ok = QInputDialog.getText(None, 'Nome', 'Digite seu nome:')
+
+    # Se o usuário pressionou o botão 'OK', exibe uma mensagem de boas-vindas com o nome inserido
+    if ok:
+        QMessageBox.information(None, 'Boas-vindas', f'Olá, {nome}!')
+
+    # app.exec_()
     
     while flag:
         pygame.time.delay(50)
@@ -191,7 +204,8 @@ def main():
             
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos, s.body[x+1 :])):
-                print('Score: ', len(s.body))
+                score.append(nome,len(s.body))
+                print('Score: ', sorted(score, reverse=True))
                 message_box('You Lost! Play Again!', f'Your score was: {len(s.body)}')
                 s.reset((10,10))
                 break
